@@ -15,14 +15,14 @@ public class Opponent extends Character {
     public Opponent(GamePanel gamePanel) {
         super(gamePanel);
         this.setX(0);
-        this.setY(GamePanel.screenHeight / 2 + GamePanel.originalTileSize / 2);
+        this.setY(GamePanel.gameHeight / 2 + GamePanel.originalTileSize / 2);
         this.setSpeed(1);
         this.setSize(GamePanel.originalTileSize);
         moveChecker = new MoveChecker(this);
         astar = new Astar(gamePanel.getGameMap());
         int colId = this.getX() / GamePanel.tileSize;
         int rowId = this.getY() / GamePanel.tileSize;
-        path = astar.findPath(colId, rowId, GamePanel.screenCol - 1, rowId);
+        path = astar.findPath(colId, rowId, GamePanel.gameCol - 1, rowId);
 
     }
 
@@ -92,9 +92,9 @@ public class Opponent extends Character {
     }
 
     public void draw(Connection connection) {
-        connection.sendData("opponent " + state + " " 
-        + this.getX() + " " + this.getY() + " "
-        + this.getSize() + " " + this.getSize());
+        connection.sendData("opponent " + state + " "
+                + this.getX() + " " + this.getY() + " "
+                + this.getSize());
     }
 
 }

@@ -69,7 +69,7 @@ public abstract class Character {
 
     abstract public void update();
 
-    abstract public void draw(Connection connection); 
+    abstract public void draw(Connection connection);
 
     public GameMap getGameMap() {
         return gameMap;

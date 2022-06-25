@@ -11,18 +11,18 @@ public class NPC extends Character {
     private Astar astar;
     private int pos = 0;
     private List<Node> path;
-    private int desCol,desRow;
+    private int desCol, desRow;
     private boolean reachDes = false;
-    
+
     public NPC(GamePanel gamePanel) {
         super(gamePanel);
         this.setSpeed(1);
         this.setSize(GamePanel.originalTileSize);
         int randX, randY;
         while (true) {
-            randX = (int) (Math.random() * GamePanel.screenCol);
-            randY = (int) (Math.random() * GamePanel.screenRow);
-            if (this.getGameMap().getPath(randY * GamePanel.screenCol + randX).getValue() != 0) {
+            randX = (int) (Math.random() * GamePanel.gameCol);
+            randY = (int) (Math.random() * GamePanel.gameRow);
+            if (this.getGameMap().getPath(randY * GamePanel.gameCol + randX).getValue() != 0) {
                 break;
             }
         }
@@ -30,9 +30,9 @@ public class NPC extends Character {
         this.setY(randY * GamePanel.tileSize + GamePanel.originalTileSize / 2);
 
         while (true) {
-            randX = (int) (Math.random() * GamePanel.screenCol);
-            randY = (int) (Math.random() * GamePanel.screenRow);
-            if (this.getGameMap().getPath(randY * GamePanel.screenCol + randX).getValue() != 0) {
+            randX = (int) (Math.random() * GamePanel.gameCol);
+            randY = (int) (Math.random() * GamePanel.gameRow);
+            if (this.getGameMap().getPath(randY * GamePanel.gameCol + randX).getValue() != 0) {
                 break;
             }
         }
@@ -107,8 +107,8 @@ public class NPC extends Character {
     }
 
     public void draw(Connection connection) {
-        connection.sendData("opponent " + state + " " 
-        + this.getX() + " " + this.getY() + " "
-        + this.getSize() + " " + this.getSize());
+        connection.sendData("NPC " + state + " "
+                + this.getX() + " " + this.getY() + " "
+                + this.getSize());
     }
 }

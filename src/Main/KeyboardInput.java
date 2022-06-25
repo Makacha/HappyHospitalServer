@@ -32,19 +32,19 @@ public class KeyboardInput {
         }
     }
 
-    public boolean getKeyW(){
+    public boolean getKeyW() {
         return this.keyW;
     }
 
-    public boolean getKeyA(){
+    public boolean getKeyA() {
         return this.keyA;
     }
 
-    public boolean getKeyS(){
+    public boolean getKeyS() {
         return this.keyS;
     }
 
-    public boolean getKeyD(){
+    public boolean getKeyD() {
         return this.keyD;
     }
 

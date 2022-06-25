@@ -10,8 +10,8 @@ public class GameMap {
     private int row, col;
 
     public GameMap() {
-        row = GamePanel.screenRow;
-        col = GamePanel.screenCol;
+        row = GamePanel.gameRow;
+        col = GamePanel.gameCol;
         path = new Tile[col * row];
         building = new Tile[col * row];
         setPath();

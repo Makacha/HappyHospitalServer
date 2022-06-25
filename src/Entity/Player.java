@@ -11,9 +11,9 @@ public class Player extends Character {
 
     public Player(GamePanel gamePanel, KeyboardInput keyboardInput) {
         super(gamePanel);
-        this.keyboardInput = keyboardInput;        
+        this.keyboardInput = keyboardInput;
         this.setX(0);
-        this.setY(GamePanel.screenHeight / 2 - GamePanel.tileSize);
+        this.setY(GamePanel.gameHeight / 2 - GamePanel.tileSize);
         this.setSpeed(1);
         this.setSize(GamePanel.originalTileSize);
         moveChecker = new MoveChecker(this);
@@ -23,10 +23,10 @@ public class Player extends Character {
         int x = this.getX();
         int y = this.getY();
         int size = this.getSize();
-        if (y < 0 || y + size > GamePanel.screenHeight) {
+        if (y < 0 || y + size > GamePanel.gameHeight) {
             return false;
         }
-        if (x < 0 || x + size > GamePanel.screenWidth) {
+        if (x < 0 || x + size > GamePanel.gameWidth) {
             return false;
         }
         if (moveChecker.buildingCollisionCheck() == false) {
@@ -40,7 +40,7 @@ public class Player extends Character {
 
     public void update() {
         int cntFrame = gamePanel.getCntFrame();
-        int[] states = {8, 10, 9, 5, 7};
+        int[] states = { 8, 10, 9, 5, 7 };
         if (this.getStun() > 0 || (keyboardInput.getKeyW() == false && keyboardInput.getKeyS() == false
                 && keyboardInput.getKeyA() == false && keyboardInput.getKeyD() == false)) {
             state = states[lastKey];
@@ -117,10 +117,9 @@ public class Player extends Character {
     }
 
     public void draw(Connection connection) {
-        connection.sendData("player " + state + " " 
-        + this.getX() + " " + this.getY() + " "
-        + this.getSize() + " " + this.getSize());
+        connection.sendData("player " + state + " "
+                + this.getX() + " " + this.getY() + " "
+                + this.getSize());
     }
-
 
 }

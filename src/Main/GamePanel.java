@@ -1,4 +1,5 @@
 package Main;
+
 import java.util.ArrayList;
 import java.util.List;
 import Entity.*;
@@ -11,12 +12,12 @@ public class GamePanel {
     public static final int scale = 2;
 
     public static final int tileSize = originalTileSize * scale;
-    public static final int screenCol = 52;
-    public static final int screenRow = 28;
+    public static final int gameCol = 52;
+    public static final int gameRow = 28;
 
-    public static final int screenWidth = screenCol * tileSize;
-    public static final int screenHeight = screenRow * tileSize;
-    
+    public static final int gameWidth = gameCol * tileSize;
+    public static final int gameHeight = gameRow * tileSize;
+
     private int cntFrame = 0;
     private KeyboardInput keyboardInput = new KeyboardInput();
     private GameMap gameMap = new GameMap();
@@ -65,21 +66,21 @@ public class GamePanel {
             opponent = new Opponent(this);
         }
     }
-    
+
     public void update() {
         cntFrame++;
         List<NPC> reachDesNPCList = new ArrayList<>();
-        for (NPC npc : npcList){
-            if( npc.getReachDes() == true){
+        for (NPC npc : npcList) {
+            if (npc.getReachDes() == true) {
                 reachDesNPCList.add(npc);
             }
         }
 
-        for (NPC npc : reachDesNPCList){
+        for (NPC npc : reachDesNPCList) {
             npcList.remove(npc);
         }
 
-        for (NPC npc : npcList){
+        for (NPC npc : npcList) {
             npc.update();
         }
 
@@ -88,7 +89,7 @@ public class GamePanel {
     }
 
     public void draw() {
-        for (NPC npc : npcList){
+        for (NPC npc : npcList) {
             npc.draw(connection);
         }
         player.draw(connection);
@@ -103,7 +104,7 @@ public class GamePanel {
     public GameMap getGameMap() {
         return gameMap;
     }
-    
+
     public List<NPC> getNPCList() {
         return npcList;
     }
