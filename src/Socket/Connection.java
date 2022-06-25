@@ -71,6 +71,8 @@ public class Connection {
             return Command.ADD;
         } else if (command.equals("update")){
             return Command.UPDATE;
+        } else if (command.equals("finish")) {
+            return Command.FINISH;
         } else {
             return Command.END;
         }
