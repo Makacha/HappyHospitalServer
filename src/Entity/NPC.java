@@ -1,6 +1,11 @@
 package Entity;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import Algorithm.*;
 import Main.GamePanel;
@@ -59,7 +64,7 @@ public class NPC extends Character {
     }
 
     public void update() {
-        if (pos == path.size() - 1) {
+        if (pos >= path.size() - 1) {
             reachDes = true;
             return;
         }
@@ -110,5 +115,60 @@ public class NPC extends Character {
         connection.sendData("NPC " + state + " "
                 + this.getX() + " " + this.getY() + " "
                 + this.getSize());
+    }
+
+    public String toJson() {
+        StringBuilder result = new StringBuilder();
+        result.append("{");
+        result.append("\"x\": " + x + ",");
+        result.append("\"y\": " + y + ",");
+        result.append("\"speed\": " + speed + ",");
+        result.append("\"size\": " + size + ",");
+        result.append("\"state\": " + state + ",");
+        result.append("\"stun\": " + stun + ",");
+        result.append("\"direction\": " + direction + ",");
+        result.append("\"pos\": " + pos + ",");
+        result.append("\"desCol\": " + desCol + ",");
+        result.append("\"desRow\": " + desRow + ",");
+        result.append("\"reachDes\": " + reachDes + ",");
+        result.append("\"path\": " + "[");
+        for (int i = 0; i < path.size(); i++) {
+            if (i > 0)
+                result.append(",");
+            result.append("{");
+            result.append("\"x\": " + path.get(i).getX() + ",");
+            result.append("\"y\": " + path.get(i).getY());
+            result.append("}");
+        }
+        result.append("]");
+        result.append("}");
+        return result.toString();
+    }
+
+    public void loadJson(String json) {
+        try {
+            JSONObject object = new JSONObject(json);
+            x = object.getInt("x");
+            y = object.getInt("y");
+            speed = object.getInt("speed");
+            size = object.getInt("size");
+            state = object.getInt("state");
+            stun = object.getInt("stun");
+            direction = object.getInt("direction");
+            pos = object.getInt("pos");
+            desCol = object.getInt("desCol");
+            desRow = object.getInt("desRow");
+            reachDes = object.getBoolean("reachDes");
+            path = new ArrayList<>();
+            JSONArray pathJson = object.getJSONArray("path");
+            for (int i = 0; i < pathJson.length(); i++) {
+                Node tmp = new Node();
+                tmp.setX(pathJson.getJSONObject(i).getInt("x"));
+                tmp.setY(pathJson.getJSONObject(i).getInt("y"));
+                path.add(tmp);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

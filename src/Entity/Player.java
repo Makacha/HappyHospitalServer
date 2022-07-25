@@ -1,5 +1,8 @@
 package Entity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import Main.GamePanel;
 import Main.KeyboardInput;
 import Socket.Connection;
@@ -111,7 +114,7 @@ public class Player extends Character {
             }
         }
 
-        if (moveChecker.npcCollisonCheck() == false) {
+        if (moveChecker.npcCollisonCheck() == false || moveChecker.characterCollisionCheck() == false) {
             this.setStun(60 * 3);
         }
     }
@@ -122,4 +125,34 @@ public class Player extends Character {
                 + this.getSize());
     }
 
+    public String toJson() {
+        StringBuilder result = new StringBuilder();
+        result.append("{");
+        result.append("\"x\": " + x + ",");
+        result.append("\"y\": " + y + ",");
+        result.append("\"speed\": " + speed + ",");
+        result.append("\"size\": " + size + ",");
+        result.append("\"state\": " + state + ",");
+        result.append("\"stun\": " + stun + ",");
+        result.append("\"direction\": " + direction + ",");
+        result.append("\"lastKey\": " + lastKey);
+        result.append("}");
+        return result.toString();
+    }
+
+    public void loadJson(String json) {
+        try {
+            JSONObject player = new JSONObject(json);
+            x = player.getInt("x");
+            y = player.getInt("y");
+            speed = player.getInt("speed");
+            size = player.getInt("size");
+            state = player.getInt("state");
+            stun = player.getInt("stun");
+            direction = player.getInt("direction");
+            lastKey = player.getInt("lastKey");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

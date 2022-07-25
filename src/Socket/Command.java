@@ -7,5 +7,7 @@ public enum Command {
     DRAW,
     END,
     FINISH,
+    LOAD_MAP,
+    SAVE_MAP,
     UPDATE;
 }

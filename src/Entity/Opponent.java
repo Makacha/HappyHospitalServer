@@ -2,6 +2,9 @@ package Entity;
 
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import Algorithm.*;
 import Main.GamePanel;
 import Socket.Connection;
@@ -10,6 +13,7 @@ public class Opponent extends Character {
     private MoveChecker moveChecker;
     private Astar astar;
     private int pos = 0;
+    private boolean inDes = false;
     private List<Node> path;
 
     public Opponent(GamePanel gamePanel) {
@@ -18,6 +22,7 @@ public class Opponent extends Character {
         this.setY(GamePanel.gameHeight / 2 + GamePanel.originalTileSize / 2);
         this.setSpeed(1);
         this.setSize(GamePanel.originalTileSize);
+        inDes = false;
         moveChecker = new MoveChecker(this);
         astar = new Astar(gamePanel.getGameMap());
         int colId = this.getX() / GamePanel.tileSize;
@@ -36,9 +41,13 @@ public class Opponent extends Character {
     }
 
     public void update() {
-        if (pos == path.size() - 1) {
+        if (pos >= path.size() - 1) {
+            if (!inDes)
+                this.getGamePanel().incSlower();
+            inDes = true;
             return;
         }
+        inDes = false;
 
         if (this.getStun() > 0) {
             this.setStun(this.getStun() - 1);
@@ -97,4 +106,38 @@ public class Opponent extends Character {
                 + this.getSize());
     }
 
+    public String toJson() {
+        StringBuilder result = new StringBuilder();
+        result.append("{");
+        result.append("\"x\": " + x + ",");
+        result.append("\"y\": " + y + ",");
+        result.append("\"speed\": " + speed + ",");
+        result.append("\"size\": " + size + ",");
+        result.append("\"state\": " + state + ",");
+        result.append("\"stun\": " + stun + ",");
+        result.append("\"direction\": " + direction + ",");
+        result.append("\"pos\": " + pos);
+        result.append("}");
+        return result.toString();
+    }
+
+    public void loadJson(String json) {
+        try {
+            JSONObject object = new JSONObject(json);
+            x = object.getInt("x");
+            y = object.getInt("y");
+            speed = object.getInt("speed");
+            size = object.getInt("size");
+            state = object.getInt("state");
+            stun = object.getInt("stun");
+            direction = object.getInt("direction");
+            pos = object.getInt("pos");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isInDes() {
+        return inDes;
+    }
 }

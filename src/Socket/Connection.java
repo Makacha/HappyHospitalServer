@@ -73,14 +73,19 @@ public class Connection {
             return Command.UPDATE;
         } else if (command.equals("finish")) {
             return Command.FINISH;
+        } else if (command.equals("load")) {
+            return Command.LOAD_MAP;
+        } else if (command.equals("save")) {
+            return Command.SAVE_MAP;
         } else {
             return Command.END;
         }
     }
 
     public static String getData(String request) {
-        if (request.split(" ").length < 2)
+        int index = request.indexOf(" ");
+        if (index == -1 || index == request.length() - 1)
             return null;
-        return request.split(" ")[1];
+        return request.substring(index + 1);
     }
 }

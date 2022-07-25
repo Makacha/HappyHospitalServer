@@ -6,6 +6,10 @@ import Entity.*;
 import Map.GameMap;
 import Socket.*;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class GamePanel {
     private Connection connection = new Connection();
     public static final int originalTileSize = 16;
@@ -19,6 +23,7 @@ public class GamePanel {
     public static final int gameHeight = gameRow * tileSize;
 
     private int cntFrame = 0;
+    private int slower = 0;
     private KeyboardInput keyboardInput = new KeyboardInput();
     private GameMap gameMap = new GameMap();
     private Player player;
@@ -47,6 +52,12 @@ public class GamePanel {
                 case DRAW:
                     draw();
                     break;
+                case LOAD_MAP:
+                    load(data);
+                    break;
+                case SAVE_MAP:
+                    save();
+                    break;
                 case FINISH:
                     shutDown = true;
                     break;
@@ -63,7 +74,8 @@ public class GamePanel {
         } else if (data.equals("player")) {
             player = new Player(this, keyboardInput);
         } else if (data.equals("opponent")) {
-            opponent = new Opponent(this);
+            if (opponent == null || opponent.isInDes())
+                opponent = new Opponent(this);
         }
     }
 
@@ -94,7 +106,46 @@ public class GamePanel {
         }
         player.draw(connection);
         opponent.draw(connection);
+        connection.sendData("slower " + slower);
         connection.sendData("end");
+    }
+
+    public void load(String data) {
+        try {
+            JSONObject object = new JSONObject(data);
+            slower = object.getInt("slower");
+            player.loadJson(object.getJSONObject("player").toString());
+            opponent.loadJson(object.getJSONObject("opponent").toString());
+            JSONArray npcArray = object.getJSONArray("npc");
+            npcList.clear();
+            for (int i = 0; i < npcArray.length(); i++) {
+                NPC newNPC = new NPC(this);
+                npcList.add(newNPC);
+                npcList.get(i).loadJson(npcArray.getJSONObject(i).toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void save() {
+        connection.sendData(this.toJson());
+    }
+
+    private String toJson() {
+        StringBuilder result = new StringBuilder();
+        result.append("{");
+        result.append("\"slower\": " + slower + ",");
+        result.append("\"player\": " + player.toJson() + ",");
+        result.append("\"opponent\": " + opponent.toJson() + ",");
+        result.append("\"npc\": [");
+        for (int i = 0; i < npcList.size(); i++) {
+            if (i > 0) result.append(",");
+            result.append(npcList.get(i).toJson());
+        }
+        result.append("]");
+        result.append("}");
+        return result.toString();
     }
 
     public int getCntFrame() {
@@ -107,5 +158,13 @@ public class GamePanel {
 
     public List<NPC> getNPCList() {
         return npcList;
+    }
+
+    public Opponent getOpponent() {
+        return opponent;
+    }
+
+    public void incSlower() {
+        slower++;
     }
 }

@@ -87,7 +87,23 @@ public class MoveChecker {
                 return false;
             }
         }
+        return true;
+    }
 
+    public boolean characterCollisionCheck() {
+        int leftX = character.getX();
+        int upY = character.getY();
+        int rightX = leftX + character.getSize() * 2;
+        int downY = upY + character.getSize() * 2;
+        Opponent opponent = character.getGamePanel().getOpponent();
+        int opponentLeftX = opponent.getX();
+        int opponentRightX = opponentLeftX + opponent.getSize() * 2;
+        int opponentUpY = opponent.getY();
+        int opponentDownY = opponentUpY + opponent.getSize() * 2;
+        if (((opponentLeftX < leftX && leftX < opponentRightX) || (leftX < opponentLeftX && opponentLeftX < rightX))
+                && ((opponentUpY < downY && downY < opponentDownY) || (upY < opponentDownY && opponentDownY < downY))) {
+            return false;
+        }
         return true;
     }
 }

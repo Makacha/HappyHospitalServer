@@ -71,6 +71,10 @@ public abstract class Character {
 
     abstract public void draw(Connection connection);
 
+    abstract public String toJson();
+
+    abstract public void loadJson(String json);
+
     public GameMap getGameMap() {
         return gameMap;
     }
